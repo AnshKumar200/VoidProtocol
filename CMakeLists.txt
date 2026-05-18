@@ -10,3 +10,7 @@ include_directories(include)
 file(GLOB SOURCES "src/*.cpp")
 
 add_executable(VoidProtocol ${SOURCES})
+
+find_package(raylib REQUIRED)
+
+target_link_libraries(VoidProtocol raylib)
