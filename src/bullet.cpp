@@ -25,3 +25,9 @@ void Bullet::Update() {
 }
 
 void Bullet::Draw() { DrawRectangleV(position, {10, 10}, BLACK); }
+
+bool Bullet::IsAlive() { return alive; }
+
+Rectangle Bullet::GetRect() { return {position.x, position.y, 10, 10}; }
+
+void Bullet::Kill() { alive = false; }

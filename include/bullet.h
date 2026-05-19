@@ -8,6 +8,9 @@ class Bullet {
     Bullet(Vector2 playerPos, Vector2 mousePos);
     void Update();
     void Draw();
+    bool IsAlive();
+    Rectangle GetRect();
+    void Kill();
 
   private:
     Vector2 position;

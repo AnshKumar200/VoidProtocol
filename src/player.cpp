@@ -4,6 +4,9 @@
 Player::Player() {
     position = {400.0f, 225.0f};
     speed = 5.0f;
+    hp = 100;
+    maxHp = 100;
+    alive = true;
 }
 
 void Player::Update() {
@@ -17,6 +20,22 @@ void Player::Update() {
         position.x += speed;
 }
 
-void Player::Draw() { DrawRectangleV(position, {30, 30}, YELLOW); }
+void Player::Draw() {
+    DrawText(TextFormat("%i / %i", hp, maxHp), position.x - 5, position.y - 10,
+             10, BLACK);
+    DrawRectangleV(position, {30, 30}, YELLOW);
+}
 
 Vector2 Player::GetPosition() { return position; }
+
+bool Player::isAlive() { return alive; }
+
+void Player::TakeDamage(int damage) {
+    hp -= damage;
+    if (hp <= 0) {
+        hp = 0;
+        alive = false;
+    }
+}
+
+Rectangle Player::GetRect() { return {position.x, position.y, 30, 30}; }

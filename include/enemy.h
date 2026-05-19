@@ -2,20 +2,19 @@
 
 #include <raylib.h>
 
-class Player {
+class Enemy {
   public:
-    Player();
-    void Update();
+    Enemy();
+    void Update(Vector2 playerPos);
     void Draw();
-    Vector2 GetPosition();
-    bool isAlive();
-    void TakeDamage(int damage);
+    bool IsAlive();
     Rectangle GetRect();
+    void TakeDamage(float damage);
 
   private:
     Vector2 position;
     float speed;
     int hp;
-    int maxHp;
+    float damage;
     bool alive;
 };
