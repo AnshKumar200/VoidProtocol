@@ -3,6 +3,8 @@
 #include "bullet.h"
 #include "enemy.h"
 #include "player.h"
+#include "ui.h"
+#include "wavemanager.h"
 #include <nlohmann/json.hpp>
 #include <raylib.h>
 #include <vector>
@@ -27,19 +29,15 @@ class Game {
     void RemoveDeadEnemies();
 
   private:
+    UI ui;
     Camera2D camera;
-
-    nlohmann::json mapData;
-    int mapWidth;
-    int mapHeight;
-    int tileWidth;
-    int tileHeight;
-    std::vector<int> tiles;
-    Texture2D tile;
+    float worldWidth;
+    float worldHeight;
 
     GameState currentState;
     void SpawnEnemy();
     Player player;
+    WaveManager waveManager;
     float spwanTimer;
     std::vector<Bullet> bullets;
     std::vector<Enemy> enemies;

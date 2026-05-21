@@ -1,4 +1,5 @@
 #include "../include/player.h"
+#include <algorithm>
 #include <raylib.h>
 
 Player::Player() {
@@ -64,3 +65,11 @@ Rectangle Player::GetRect() { return {position.x, position.y, 30, 30}; }
 Vector2 Player::GetCenter() {
     return {position.x + frameWidth / 2.0f, position.y + frameHeight / 2.0f};
 }
+
+void Player::ClampToWorld(float width, float height) {
+    position.x = std::clamp(position.x, 0.0f, width - frameWidth);
+    position.y = std::clamp(position.y, 0.0f, height - frameHeight);
+}
+
+int Player::GetHp() { return hp; }
+int Player::GetMaxHp() { return maxHp; }

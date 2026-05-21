@@ -12,7 +12,6 @@ int main(void) {
 
         BeginDrawing();
         ClearBackground(WHITE);
-        DrawText("VOID PROTOCOL", 10, 10, 20, BLACK);
         game.Draw();
         EndDrawing();
     }

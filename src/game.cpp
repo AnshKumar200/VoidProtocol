@@ -1,6 +1,5 @@
 #include "../include/game.h"
 #include <algorithm>
-#include <fstream>
 #include <nlohmann/json.hpp>
 #include <raylib.h>
 
@@ -11,20 +10,10 @@ Game::Game() {
     camera.target = player.GetCenter();
     camera.offset = {GetScreenWidth() / 2.0f, GetScreenHeight() / 2.0f};
     camera.rotation = 0.0f;
-    camera.zoom = 1.5f;
+    camera.zoom = 1.0f;
 
-    //    std::ifstream file("assets/map.json");
-    //    file >> mapData;
-
-    //    mapWidth = mapData["width"];
-    //    mapHeight = mapData["height"];
-
-    //    tileWidth = mapData["tilewidth"];
-    //    tileHeight = mapData["tileheight"];
-
-    //    tiles = mapData["layers"][0]["data"].get<std::vector<int>>();
-
-    //    tile = LoadTexture("assets/tile.png");
+    worldWidth = 900;
+    worldHeight = 900;
 }
 
 Game::~Game() {}
@@ -51,16 +40,7 @@ void Game::DrawMenu() {
 void Game::DrawGameplay() {
     BeginMode2D(camera);
 
-    //   for (int y = 0; y < mapHeight; y++) {
-    //        for (int x = 0; x < mapWidth; x++) {
-
-    //            int tileID = tiles[y * mapWidth + x];
-
-    //            if (tileID != 0) {
-    //                DrawTexture(tile, x * tileWidth, y * tileHeight, WHITE);
-    //            }
-    //        }
-    //    }
+    DrawRectangleLines(0, 0, worldWidth, worldHeight, BLACK);
 
     player.Draw();
 
@@ -73,6 +53,9 @@ void Game::DrawGameplay() {
     }
 
     EndMode2D();
+
+    ui.DrawHealthBar(player.GetHp(), player.GetMaxHp());
+    ui.DrawWaveCounter(waveManager.GetCurrentWave(), enemies.size());
 }
 
 void Game::DrawGameover() {}
@@ -109,6 +92,7 @@ void Game::UpdateGameplay() {
         bullets.push_back(Bullet(playerPos, mousePos));
     }
     player.Update();
+    player.ClampToWorld(worldWidth, worldHeight);
     Vector2 target = player.GetCenter();
     camera.target.x += (target.x - camera.target.x) * 0.1f;
     camera.target.y += (target.y - camera.target.y) * 0.1f;
@@ -116,12 +100,13 @@ void Game::UpdateGameplay() {
     camera.target.x = roundf(camera.target.x);
     camera.target.y = roundf(camera.target.y);
 
-    SpawnEnemy();
+    waveManager.Update(enemies);
+
     for (Bullet &bullet : bullets) {
         bullet.Update();
     }
     for (Enemy &enemy : enemies) {
-        enemy.Update(player.GetPosition());
+        enemy.Update(player.GetCenter());
     }
     CheckCollosions();
     RemoveDeadBullets();
@@ -129,14 +114,6 @@ void Game::UpdateGameplay() {
 }
 
 void Game::UpdateGameover() {}
-
-void Game::SpawnEnemy() {
-    spwanTimer += GetFrameTime();
-    if (spwanTimer > 2) {
-        enemies.push_back(Enemy());
-        spwanTimer = 0;
-    }
-};
 
 void Game::CheckCollosions() {
     for (Bullet &bullet : bullets) {

@@ -15,6 +15,9 @@ class Player {
     void TakeDamage(int damage);
     Rectangle GetRect();
     Vector2 GetCenter();
+    void ClampToWorld(float width, float height);
+    int GetHp();
+    int GetMaxHp();
 
   private:
     Vector2 position;
