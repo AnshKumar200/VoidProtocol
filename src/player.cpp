@@ -2,14 +2,35 @@
 #include <raylib.h>
 
 Player::Player() {
-    position = {400.0f, 225.0f};
-    speed = 5.0f;
+    position = {GetScreenWidth() / 2.0f, GetScreenHeight() / 2.0f};
+    speed = 2.0f;
     hp = 100;
     maxHp = 100;
     alive = true;
+
+    player = LoadTexture("assets/player.png");
+    frameWidth = 64;
+    frameHeight = 64;
+    currentFrame = 0;
+    frameCounter = 0;
+    frameSpeed = 5;
+
+    frameRect = {0.0f, 0.0f, 64.0f, 64.0f};
 }
 
+Player::~Player() { UnloadTexture(player); }
+
 void Player::Update() {
+    frameCounter++;
+    if (frameCounter >= (60 / frameSpeed)) {
+        frameCounter = 0;
+        currentFrame++;
+
+        if (currentFrame > 1)
+            currentFrame = 0;
+        frameRect.x = currentFrame * frameWidth;
+    }
+
     if (IsKeyDown(KEY_W))
         position.y -= speed;
     if (IsKeyDown(KEY_S))
@@ -23,7 +44,7 @@ void Player::Update() {
 void Player::Draw() {
     DrawText(TextFormat("%i / %i", hp, maxHp), position.x - 5, position.y - 10,
              10, BLACK);
-    DrawRectangleV(position, {30, 30}, YELLOW);
+    DrawTextureRec(player, frameRect, position, WHITE);
 }
 
 Vector2 Player::GetPosition() { return position; }
@@ -39,3 +60,7 @@ void Player::TakeDamage(int damage) {
 }
 
 Rectangle Player::GetRect() { return {position.x, position.y, 30, 30}; }
+
+Vector2 Player::GetCenter() {
+    return {position.x + frameWidth / 2.0f, position.y + frameHeight / 2.0f};
+}

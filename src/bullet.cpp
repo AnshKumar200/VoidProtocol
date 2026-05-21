@@ -3,9 +3,8 @@
 #include <raylib.h>
 
 Bullet::Bullet(Vector2 playerPos, Vector2 mousePos) {
-    Vector2 playerCenter = {playerPos.x + 30.0f / 2, playerPos.y + 30.0f / 2};
-    float dx = mousePos.x - playerCenter.x;
-    float dy = mousePos.y - playerCenter.y;
+    float dx = mousePos.x - playerPos.x;
+    float dy = mousePos.y - playerPos.y;
     float length = sqrtf((dx * dx) + (dy * dy));
 
     if (length < 0.01f) {
@@ -14,7 +13,7 @@ Bullet::Bullet(Vector2 playerPos, Vector2 mousePos) {
     }
     direction.x = dx / length;
     direction.y = dy / length;
-    position = playerCenter;
+    position = playerPos;
     speed = 10;
     alive = true;
 }

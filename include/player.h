@@ -2,15 +2,19 @@
 
 #include <raylib.h>
 
+enum class PlayerState { IDLE, WALK };
+
 class Player {
   public:
     Player();
+    ~Player();
     void Update();
     void Draw();
     Vector2 GetPosition();
     bool isAlive();
     void TakeDamage(int damage);
     Rectangle GetRect();
+    Vector2 GetCenter();
 
   private:
     Vector2 position;
@@ -18,4 +22,12 @@ class Player {
     int hp;
     int maxHp;
     bool alive;
+
+    Texture2D player;
+    Rectangle frameRect;
+    int currentFrame;
+    int frameCounter;
+    int frameSpeed;
+    int frameHeight;
+    int frameWidth;
 };
