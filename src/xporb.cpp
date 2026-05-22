@@ -1,9 +1,9 @@
 #include "../include/xporb.h"
 #include <raylib.h>
 
-XPOrb::XPOrb(Vector2 pos) {
+XPOrb::XPOrb(Vector2 pos, int xp) {
     position = pos;
-    xpValue = 1;
+    xpValue = xp;
     alive = true;
 }
 

@@ -7,7 +7,6 @@ class WaveManager {
     WaveManager();
     void Update(std::vector<Enemy> &enemies);
     int GetCurrentWave();
-    float GetBossTimer();
 
   private:
     int currentWave;
@@ -16,6 +15,5 @@ class WaveManager {
 
     int enemiesToSpawn;
 
-    float bossTimer;
     bool bossSpawned;
 };

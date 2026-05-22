@@ -1,5 +1,6 @@
 #include "../include/game.h"
 #include <algorithm>
+#include <fstream>
 #include <nlohmann/json.hpp>
 #include <raylib.h>
 
@@ -12,8 +13,21 @@ Game::Game() {
     camera.rotation = 0.0f;
     camera.zoom = 1.0f;
 
-    worldWidth = 900;
-    worldHeight = 900;
+    std::ifstream file("assets/map.json");
+    file >> mapData;
+
+    mapWidth = mapData["width"];
+    mapHeight = mapData["height"];
+
+    tileWidth = mapData["tilewidth"];
+    tileHeight = mapData["tileheight"];
+
+    tiles = mapData["layers"][0]["data"].get<std::vector<int>>();
+
+    tile = LoadTexture("assets/tile.png");
+
+    worldWidth = mapWidth * tileWidth;
+    worldHeight = mapHeight * tileHeight;
 }
 
 Game::~Game() {}
@@ -40,7 +54,29 @@ void Game::DrawMenu() {
 void Game::DrawGameplay() {
     BeginMode2D(camera);
 
-    DrawRectangleLines(0, 0, worldWidth, worldHeight, BLACK);
+    for (int y = 0; y < mapHeight; y++) {
+
+        for (int x = 0; x < mapWidth; x++) {
+
+            int tileID = tiles[y * mapWidth + x];
+
+            if (tileID == 0)
+                continue;
+
+            tileID--;
+
+            int tilesPerRow = tile.width / tileWidth;
+
+            Rectangle source = {(float)((tileID % tilesPerRow) * tileWidth),
+                                (float)((tileID / tilesPerRow) * tileHeight),
+                                (float)tileWidth, (float)tileHeight};
+
+            Rectangle dest = {(float)(x * tileWidth), (float)(y * tileHeight),
+                              (float)tileWidth, (float)tileHeight};
+
+            DrawTextureRec(tile, source, {dest.x, dest.y}, WHITE);
+        }
+    }
 
     player.Draw();
 
@@ -56,7 +92,15 @@ void Game::DrawGameplay() {
 
     EndMode2D();
 
-    ui.DrawPlayerStats(player.GetHp(), player.GetMaxHp(), player.GetXP());
+    Enemy *boss = nullptr;
+    for (Enemy &enemy : enemies) {
+        if (enemy.IsBoss()) {
+            boss = &enemy;
+            break;
+        }
+    }
+    ui.DrawBossBar(boss);
+    ui.DrawPlayerStats(player);
     ui.DrawWaveCounter(waveManager.GetCurrentWave(), enemies.size());
 }
 
@@ -149,7 +193,8 @@ void Game::CheckCollosions() {
 void Game::RemoveDeadEnemies() {
     for (Enemy &enemy : enemies) {
         if (!enemy.IsAlive()) {
-            xporbs.push_back(XPOrb({enemy.GetRect().x, enemy.GetRect().y}));
+            xporbs.push_back(
+                XPOrb({enemy.GetRect().x, enemy.GetRect().y}, enemy.GetXp()));
         }
     }
 

@@ -12,12 +12,18 @@ class Enemy {
     void TakeDamage(float damage);
     void MakeBoss();
     float GetDamage();
+    int GetHp();
+    int GetMaxHp();
+    bool IsBoss();
+    int GetXp();
 
   private:
     Vector2 position;
     float speed;
     int hp;
+    int maxHp;
     float damage;
     bool alive;
     bool isBoss;
+    int xp;
 };

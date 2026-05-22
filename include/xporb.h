@@ -4,7 +4,7 @@
 
 class XPOrb {
   public:
-    XPOrb(Vector2 pos);
+    XPOrb(Vector2 pos, int xp);
     //    void Update()
     void Draw();
     Rectangle GetRec();

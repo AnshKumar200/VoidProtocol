@@ -10,6 +10,8 @@
 #include <raylib.h>
 #include <vector>
 
+// TODO - UpgradeSystem upgradeSystem;
+
 enum class GameState { MENU, PLAYING, GAMEOVER };
 
 class Game {
@@ -33,8 +35,6 @@ class Game {
   private:
     UI ui;
     Camera2D camera;
-    float worldWidth;
-    float worldHeight;
 
     GameState currentState;
     void SpawnEnemy();
@@ -44,7 +44,14 @@ class Game {
     std::vector<Bullet> bullets;
     std::vector<Enemy> enemies;
     std::vector<XPOrb> xporbs;
-    // WaveManager waveManager;
-    // UpgradeSystem upgradeSystem;
-    // UI ui;
+
+    nlohmann::json mapData;
+    int worldWidth;
+    int worldHeight;
+    int mapWidth;
+    int mapHeight;
+    int tileWidth;
+    int tileHeight;
+    std::vector<int> tiles;
+    Texture2D tile;
 };
