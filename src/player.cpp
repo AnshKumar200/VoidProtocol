@@ -8,6 +8,7 @@ Player::Player() {
     hp = 100;
     maxHp = 100;
     alive = true;
+    XP = 0;
 
     player = LoadTexture("assets/player.png");
     frameWidth = 64;
@@ -60,7 +61,7 @@ void Player::TakeDamage(int damage) {
     }
 }
 
-Rectangle Player::GetRect() { return {position.x, position.y, 30, 30}; }
+Rectangle Player::GetRect() { return {GetCenter().x, GetCenter().y, 30, 30}; }
 
 Vector2 Player::GetCenter() {
     return {position.x + frameWidth / 2.0f, position.y + frameHeight / 2.0f};
@@ -73,3 +74,6 @@ void Player::ClampToWorld(float width, float height) {
 
 int Player::GetHp() { return hp; }
 int Player::GetMaxHp() { return maxHp; }
+int Player::GetXP() { return XP; }
+
+void Player::AddXP(int xp) { XP += xp; }

@@ -5,6 +5,7 @@
 #include "player.h"
 #include "ui.h"
 #include "wavemanager.h"
+#include "xporb.h"
 #include <nlohmann/json.hpp>
 #include <raylib.h>
 #include <vector>
@@ -27,6 +28,7 @@ class Game {
     void CheckCollosions();
     void RemoveDeadBullets();
     void RemoveDeadEnemies();
+    void RemoveDeadXP();
 
   private:
     UI ui;
@@ -41,6 +43,7 @@ class Game {
     float spwanTimer;
     std::vector<Bullet> bullets;
     std::vector<Enemy> enemies;
+    std::vector<XPOrb> xporbs;
     // WaveManager waveManager;
     // UpgradeSystem upgradeSystem;
     // UI ui;

@@ -11,7 +11,6 @@ WHEN boss appears
 WHEN next wave starts
  * */
 
-// aliveEnemies
 // wave cooldown like a time before the next wave spawns? would be nice
 
 WaveManager::WaveManager() {

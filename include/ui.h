@@ -5,7 +5,7 @@
 class UI {
   public:
     UI();
-    void DrawHealthBar(int hp, int maxHp);
+    void DrawPlayerStats(int hp, int maxHp, int XP);
     void DrawWaveCounter(int currentWave, int enemiesRemaining);
     void MiniMap();
     void BossWarning();

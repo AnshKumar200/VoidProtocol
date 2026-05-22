@@ -18,6 +18,8 @@ class Player {
     void ClampToWorld(float width, float height);
     int GetHp();
     int GetMaxHp();
+    int GetXP();
+    void AddXP(int xp);
 
   private:
     Vector2 position;
@@ -25,6 +27,7 @@ class Player {
     int hp;
     int maxHp;
     bool alive;
+    int XP;
 
     Texture2D player;
     Rectangle frameRect;

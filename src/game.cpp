@@ -44,17 +44,19 @@ void Game::DrawGameplay() {
 
     player.Draw();
 
+    for (XPOrb &xporb : xporbs) {
+        xporb.Draw();
+    }
     for (Bullet &bullet : bullets) {
         bullet.Draw();
     }
-
     for (Enemy &enemy : enemies) {
         enemy.Draw();
     }
 
     EndMode2D();
 
-    ui.DrawHealthBar(player.GetHp(), player.GetMaxHp());
+    ui.DrawPlayerStats(player.GetHp(), player.GetMaxHp(), player.GetXP());
     ui.DrawWaveCounter(waveManager.GetCurrentWave(), enemies.size());
 }
 
@@ -108,9 +110,11 @@ void Game::UpdateGameplay() {
     for (Enemy &enemy : enemies) {
         enemy.Update(player.GetCenter());
     }
+
     CheckCollosions();
     RemoveDeadBullets();
     RemoveDeadEnemies();
+    RemoveDeadXP();
 }
 
 void Game::UpdateGameover() {}
@@ -133,9 +137,22 @@ void Game::CheckCollosions() {
             player.TakeDamage(1);
         }
     }
+
+    for (XPOrb &xporb : xporbs) {
+        if (CheckCollisionRecs(player.GetRect(), xporb.GetRec())) {
+            player.AddXP(xporb.GetXP());
+            xporb.Kill();
+        }
+    }
 }
 
 void Game::RemoveDeadEnemies() {
+    for (Enemy &enemy : enemies) {
+        if (!enemy.IsAlive()) {
+            xporbs.push_back(XPOrb({enemy.GetRect().x, enemy.GetRect().y}));
+        }
+    }
+
     enemies.erase(std::remove_if(enemies.begin(), enemies.end(),
                                  [](Enemy &enemy) { return !enemy.IsAlive(); }),
                   enemies.end());
@@ -146,4 +163,10 @@ void Game::RemoveDeadBullets() {
         std::remove_if(bullets.begin(), bullets.end(),
                        [](Bullet &bullet) { return !bullet.IsAlive(); }),
         bullets.end());
+}
+
+void Game::RemoveDeadXP() {
+    xporbs.erase(std::remove_if(xporbs.begin(), xporbs.end(),
+                                [](XPOrb &xporb) { return !xporb.isAlive(); }),
+                 xporbs.end());
 }
