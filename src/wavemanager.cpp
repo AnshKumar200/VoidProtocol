@@ -25,6 +25,13 @@ WaveManager::WaveManager() {
 void WaveManager::Update(std::vector<Enemy> &enemies) {
     spawnTimer += GetFrameTime();
 
+    if (currentWave % 2 == 0 && !bossSpawned) {
+        Enemy boss = Enemy();
+        boss.MakeBoss();
+        enemies.push_back(boss);
+        bossSpawned = true;
+    }
+
     if (enemiesToSpawn > 0 && spawnTimer >= nextSpawnTime) {
         enemies.push_back(Enemy());
         enemiesToSpawn--;

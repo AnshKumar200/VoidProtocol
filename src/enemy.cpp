@@ -4,15 +4,20 @@
 
 Enemy::Enemy() {
     position = {0, 0};
-    speed = 1;
+    speed = 1.0f;
     hp = 100;
     damage = 0;
     alive = true;
+    isBoss = false;
 }
 
 void Enemy::Draw() {
     DrawText(TextFormat("%i", hp), position.x - 2, position.y - 10, 10, BLACK);
-    DrawRectangleV(position, {10, 20}, RED);
+    if (isBoss) {
+        DrawRectangleV(position, {40, 40}, BLUE);
+    } else {
+        DrawRectangleV(position, {10, 20}, RED);
+    }
 }
 
 void Enemy::Update(Vector2 playerPos) {
@@ -29,6 +34,7 @@ void Enemy::Update(Vector2 playerPos) {
 }
 
 bool Enemy::IsAlive() { return alive; }
+float Enemy::GetDamage() { return damage; }
 
 Rectangle Enemy::GetRect() { return {position.x, position.y, 10, 20}; }
 
@@ -38,4 +44,11 @@ void Enemy::TakeDamage(float damage) {
         hp = 0;
         alive = false;
     }
+}
+
+void Enemy::MakeBoss() {
+    isBoss = true;
+    hp = 500;
+    speed = 1.0f;
+    damage = 5;
 }

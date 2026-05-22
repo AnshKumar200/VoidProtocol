@@ -10,6 +10,8 @@ class Enemy {
     bool IsAlive();
     Rectangle GetRect();
     void TakeDamage(float damage);
+    void MakeBoss();
+    float GetDamage();
 
   private:
     Vector2 position;
@@ -17,4 +19,5 @@ class Enemy {
     int hp;
     float damage;
     bool alive;
+    bool isBoss;
 };

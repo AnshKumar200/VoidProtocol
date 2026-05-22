@@ -134,7 +134,7 @@ void Game::CheckCollosions() {
 
     for (Enemy &enemy : enemies) {
         if (CheckCollisionRecs(enemy.GetRect(), player.GetRect())) {
-            player.TakeDamage(1);
+            player.TakeDamage(enemy.GetDamage());
         }
     }
 
