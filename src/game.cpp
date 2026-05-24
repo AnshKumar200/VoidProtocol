@@ -140,8 +140,19 @@ void Game::UpdateGameplay() {
     player.Update();
     player.ClampToWorld(worldWidth, worldHeight);
     Vector2 target = player.GetCenter();
+
     camera.target.x += (target.x - camera.target.x) * 0.1f;
     camera.target.y += (target.y - camera.target.y) * 0.1f;
+
+    float halfScreenWidth = GetScreenWidth() / 2.0f / camera.zoom;
+
+    float halfScreenHeight = GetScreenHeight() / 2.0f / camera.zoom;
+
+    camera.target.x = std::clamp(camera.target.x, halfScreenWidth,
+                                 worldWidth - halfScreenWidth);
+
+    camera.target.y = std::clamp(camera.target.y, halfScreenHeight,
+                                 worldHeight - halfScreenHeight);
 
     camera.target.x = roundf(camera.target.x);
     camera.target.y = roundf(camera.target.y);
